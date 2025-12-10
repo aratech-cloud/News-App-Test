@@ -40,12 +40,13 @@ function sleep(ms) {
 
     // Klik tombol Register
     let registerButton = await driver.findElement(
-      By.css('button[type="submit"]')
+      By.css('button.btn.btn-primary.mt-3')
     );
-    await registerButton.click();
+
+    await driver.actions().move({origin: registerButton}).click().perform();
 
     // Tunggu beberapa detik untuk memastikan pendaftaran selesai
-    await sleep(5000); // Tunggu 2 detik
+    await sleep(2000); // Tunggu 2 detik
 
     // Verifikasi hasil pendaftaran
     let bodyText = await driver.findElement(By.css("body")).getText();
@@ -74,11 +75,14 @@ function sleep(ms) {
     await loginPasswordInput.sendKeys("password123"); // Ganti dengan password yang sesuai
 
     // Klik tombol Login
-    let loginButton = await driver.findElement(By.css('button[type="submit"]'));
-    await loginButton.click();
+    let loginButton = await driver.findElement(
+      By.css('button.btn.btn-primary')
+    );
+
+    await driver.actions().move({origin: loginButton}).click().perform();
 
     // Tunggu beberapa detik untuk memastikan login selesai
-    await sleep(5000); // Tunggu 2 detik
+    await sleep(2000); // Tunggu 2 detik
 
     // Tunggu redirect ke dashboard
     await driver.wait(until.urlContains("dashboard.php"), 10000); // Ganti dengan URL dashboard yang sesuai
@@ -154,7 +158,7 @@ function sleep(ms) {
     await contactUsLink.click();
 
     // Tunggu beberapa detik untuk memastikan halaman Contact Us dimuat
-    await sleep(5000); // Tunggu 2 detik
+    await sleep(2000); // Tunggu 2 detik
 
     // Verifikasi berada di halaman Contact Us
     await driver.wait(until.urlContains("contact.php"), 10000); // Ganti dengan URL contact yang sesuai
@@ -178,18 +182,21 @@ function sleep(ms) {
 
     // Isi email
     let contactEmailInput = await driver.findElement(By.id("email"));
-    await contactEmailInput.sendKeys("tester@example.com"); // Ganti dengan email yang sesuai
+    await contactEmailInput.sendKeys("newuser@example.com"); // Ganti dengan email yang sesuai
 
     // Isi pesan
     let contactMessageInput = await driver.findElement(By.id("message"));
     await contactMessageInput.sendKeys("This is a test message."); // Ganti dengan pesan yang sesuai
 
     // Klik tombol Send Email
-    let sendButton = await driver.findElement(By.css('button[type="submit"]'));
-    await sendButton.click();
+    let sendEmailButton = await driver.findElement(
+      By.css('button.btn.btn-primary.mt-3')
+    );
+
+    await driver.actions().move({origin: sendEmailButton}).click().perform();
 
     // Tunggu beberapa detik untuk memastikan formulir dikirim
-    await sleep(5000); // Tunggu 2 detik
+    await sleep(2000); // Tunggu 2 detik
 
     try {
       // Tunggu hingga alert muncul
@@ -202,8 +209,11 @@ function sleep(ms) {
       console.log("Melanjutkan ke logout...");
 
       // Klik tombol "Logout"
-      let logoutButton = await driver.findElement(By.linkText("Logout"));
-      await logoutButton.click();
+      let logoutButton = await driver.findElement(
+        By.css('button.btn.btn-primary')
+      );
+
+      await driver.actions().move({origin: logoutButton}).click().perform();
 
       // Tunggu beberapa detik untuk memastikan logout selesai
       await sleep(2000); // Tunggu 2 detik
@@ -230,12 +240,12 @@ function sleep(ms) {
       await sleep(2000); // Tunggu 2 detik
 
       // Verifikasi berada di halaman login setelah logout
-      // Verifikasi berada di halaman login setelah logout
       await driver.wait(until.urlContains("login.php"), 10000); // Ganti dengan URL login yang sesuai
 
       // Verifikasi apakah halaman login terlihat
       let loginHeadingText = await driver.findElement(By.css("h2")).getText();
-      if (loginHeadingText === "Login") {
+
+      if (loginHeadingText.includes("Login")) {
         console.log("Berhasil logout dan berada di halaman login!");
       } else {
         console.log("Gagal logout atau tidak berada di halaman login.");
